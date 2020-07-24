@@ -1,0 +1,75 @@
+﻿@model MovieBindingModel
+@{
+    string caption = Model.Id == 0
+        ? "Добавление нового фильма"
+        : $"Редактирование фильма ID: {Model.Id}";
+    bool isNewMovie = Model.Id == 0;
+}
+
+<h1>@caption</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<form method="post" asp-action="@(isNewMovie ? "Add" : "Edit")" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <input asp-for="Id" />
+            <input asp-for="Poster" />
+            <input asp-for="CreatedBy" />
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director"></label>
+                <input asp-for="Director" class="form-control" />
+                <span asp-validation-for="Director" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Image"></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" asp-for="Image">
+                    <label class="custom-file-label" asp-for="Image">&nbsp;</label>
+                </div>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Poster))
+            {
+                <div class="form-group">
+                    <img src="@Url.Content(Model.Poster)" alt="" class="img-fluid img-thumbnail" />
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success">Сохранить</button>
+        @if (!isNewMovie)
+        {
+            <button class="btn btn-danger" formaction="@Url.Action("Delete")"
+                    onclick="return confirm('Вы действительно хотите продолжить?')">
+                Удалить
+            </button>
+        }
+    </div>
+</form>

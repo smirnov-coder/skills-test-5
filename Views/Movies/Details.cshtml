@@ -1,0 +1,35 @@
+﻿@model Movie
+@{
+    ViewData["Title"] = "Описание фильма";
+}
+
+<div class="card mb-3 border-secondary">
+    <div class="row no-gutters">
+        <div class="col-md-5">
+            <img src="@Url.Content(Model.Poster)" class="card-img" alt="@Model.Title">
+        </div>
+        <div class="col-md-7">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>
+                <p>Год выпуска: @Model.Year</p>
+                <p>Режиссёр: @Model.Director</p>
+                <div class="form-group">
+                    <label>Описание:</label>
+                    <p class="card-text">@Model.Description</p>
+                </div>
+                @if (Model.CreatedBy == User?.Identity?.Name)
+                {
+                    <form asp-action="Delete" asp-controller="Movies" class="form-inline">
+                        <div class="form-group">
+                            <input asp-for="Id" type="hidden" />
+                            <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>
+                            <button type="submit" 
+                                    class="btn btn-danger ml-1" 
+                                    onclick="return confirm('Вы действительно хотите продолжить?')">Удалить</button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

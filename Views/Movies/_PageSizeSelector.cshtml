@@ -1,0 +1,11 @@
+﻿@model int
+<div class="form-inline mb-2">
+    <div class="form-group">
+        <label for="page-size-selector" class="mr-2">Размер страницы:</label>
+        <select id="page-size-selector" class="custom-select">
+            <option value="10" selected="@(Model == 10)">10</option>
+            <option value="20" selected="@(Model == 20)">20</option>
+            <option value="40" selected="@(Model == 40)">40</option>
+        </select>
+    </div>
+</div>

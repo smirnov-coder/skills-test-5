@@ -1,0 +1,45 @@
+﻿@{
+    bool isLoggedIn = User?.Identity?.IsAuthenticated ?? false;
+}
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            @*<a class="navbar-brand" asp-area="" asp-controller="Movies" asp-action="Index">Фильмотека</a>*@
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Movies" asp-action="Index">Каталог</a>
+                    </li>
+                    @if (isLoggedIn)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Movies" asp-action="Add">Добавить фильм</a>
+                        </li>
+                    }
+                    @* Hack *@
+                    <li class="nav-item flex-grow-1"></li>
+                    @if (!isLoggedIn)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
+                        </li>
+                    }
+                </ul>
+                @if (isLoggedIn)
+                {
+                    <span class="nav-link pl-0">
+                        @User.Identity.Name
+                        <a asp-action="Logout" asp-controller="Account" class="btn btn-sm btn-danger ml-1">Выйти</a>
+                    </span>
+                }
+            </div>
+        </div>
+    </nav>
+</header>

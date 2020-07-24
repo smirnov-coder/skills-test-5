@@ -1,0 +1,13 @@
+﻿$img-height: 300px;
+
+.movie-card {
+
+    &__img {
+        height: $img-height;
+        object-fit: cover;
+
+        &-holder {
+            height: $img-height;
+        }
+    }
+}

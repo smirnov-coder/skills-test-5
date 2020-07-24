@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +6,9 @@ using SkillsTest.Models;
 
 namespace SkillsTest.Controllers
 {
+    /// <summary>
+    /// Контроллер аутентификации/аторизации.
+    /// </summary>
     public class AccountController : Controller
     {
         private SignInManager<IdentityUser> _signInManager;
@@ -47,13 +48,18 @@ namespace SkillsTest.Controllers
             var createResult = await _userManager.CreateAsync(user, model.Password);
             if (!createResult.Succeeded)
             {
-                ModelState.AddModelError("", "Не удалось зарегистрировать пользователя. Повторите попытку позднее " +
-                    "или обратитесь к администратору.");
+                ModelState.AddModelError("", "Не удалось зарегистрировать пользователя.");
+                // Принадлежность некоторых ошибок Identity можно идентифицировать по первому слову текстового
+                // свойства 'Code'.
                 foreach (var error in createResult.Errors)
                     ModelState.AddModelError(error.Code.StartsWith("Password") ? "Password" : "", error.Description);
                 return View(model);
             }
+
+            // Выйти из приложения (удалить куки авторизации).
             await _signInManager.SignOutAsync();
+
+            // Перенаправить пользователя на страницу логина.
             return RedirectToAction(nameof(Login));
         }
 
@@ -82,14 +88,19 @@ namespace SkillsTest.Controllers
                 return View(model);
             }
 
+            // На всякий случай выйти из приложения (удалить куки авторизации).
             await _signInManager.SignOutAsync();
+
+            // Пробуем войти в приложении. В случае удачи в ответ сервера будут включены куки авторизации.
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
             if (!signInResult.Succeeded)
             {
-                ModelState.AddModelError("", "Не удалось войти на сайт. Повторите попытку позднее или обратитесь " +
-                    "к администратору.");
+                ModelState.AddModelError("", "Не удалось войти на сайт.");
                 return View(model);
             }
+
+            // Если в строке запроса имеется 'returnUrl' (локальный) - переходим по нему. Иначе переходим на
+            // главную страницу.
             string redirectUrl = string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl)
                  ? returnUrl
                  : Url.Action("Index", "Movies");
@@ -101,8 +112,5 @@ namespace SkillsTest.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Movies");
         }
-
-        [Route("[controller]/access-denied")]
-        public IActionResult AccessDenied() => View();
     }
 }

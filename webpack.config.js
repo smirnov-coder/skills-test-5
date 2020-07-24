@@ -1,4 +1,4 @@
-﻿const webpack = require("webpack");
+const webpack = require("webpack");
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -66,20 +66,20 @@ module.exports = () => {
                 verbose: true,
                 cleanOnceBeforeBuildPatterns: ['!user-images*', 'css/**/*', 'js/**/*'], 
             }),
-            //new CopyWebpackPlugin({
-            //    patterns: [
-            //        {
-            //            from: "./Frontend/favicon",
-            //            to: "./",
-            //            noErrorOnMissing: true,
-            //        },
-            //        {
-            //            from: "./Frontend/images",
-            //            to: "./images",
-            //            noErrorOnMissing: true,
-            //        }
-            //    ]
-            //}),
+            new CopyWebpackPlugin({
+                patterns: [
+                    //{
+                    //    from: "./Frontend/favicon",
+                    //    to: "./",
+                    //    noErrorOnMissing: true,
+                    //},
+                    {
+                        from: "./Frontend/images",
+                        to: "./images",
+                        noErrorOnMissing: true,
+                    }
+                ]
+            }),
             new MiniCssExtractPlugin({
                 filename: `css/[name]${isDevelopment ? "" : ".min"}.css`
             }),

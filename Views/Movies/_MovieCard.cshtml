@@ -1,4 +1,4 @@
-﻿@model Movie
+@model Movie
 
 <div class="card h-100 border-secondary movie-card">
     <a asp-action="Details" asp-route-id="@Model.Id" class="movie-card__img-holder bg-secondary text-white">
@@ -9,6 +9,10 @@
     </div>
     <div class="card-footer bg-white border-0">
         <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Подробно</a>
+        @*
+            Если пользователь является "владельцем" этого фильма, он может перейти к редактированию фильма по ссылке
+            на карточке. Плюс так визуально можно быстро увидеть какие фильмы "принадлежат" пользователю.
+        *@
         @if (Model.CreatedBy == User?.Identity?.Name)
         {
             <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>

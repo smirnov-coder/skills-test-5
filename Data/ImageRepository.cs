@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkillsTest.Data
 {
+    /// <inheritdoc cref="IImageRepository"/>
     public class ImageRepository : IImageRepository
     {
         private IWebHostEnvironment _environment;
@@ -34,6 +33,7 @@ namespace SkillsTest.Data
             return $"~/{_directoryName}/{fileName}";
         }
 
+        // Генерирует уникальное имя файла на основе GUID.
         private string GenerateUniqueFileName(string extension)
         {
             return string.Format("{0}{1}", Guid.NewGuid(), extension);

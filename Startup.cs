@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +26,6 @@ namespace SkillsTest
             Environment = environment;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             string
@@ -40,49 +35,60 @@ namespace SkillsTest
                 Directory.CreateDirectory(dataFolder);
             connectionString = connectionString.Replace("{DataDirectory}", dataFolder);
 
+            // Добавить EntityFrameworkCore с SQLite.
             services.AddDbContext<MoviesDbContext>(options => options.UseSqlite(connectionString));
+            // Добавить Identity.
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<MoviesDbContext>();
 
+            // Настройка cookie.
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
+                // Время хранения куки в браузере = 10 дней.
                 options.ExpireTimeSpan = TimeSpan.FromDays(10);
-
-                options.LoginPath = "/account/login";
-                options.AccessDeniedPath = "/error/403";
                 options.SlidingExpiration = true;
+
+                // Редирект на страницу логина при формировании ответа 401.
+                options.LoginPath = "/account/login";
+                // Редирект на страницу "Доступ запрещён" при формировании ответа 403.
+                options.AccessDeniedPath = "/error/403";
             });
 
+            // Настройка маппинга Automapper.
             var mappingConfig = new MapperConfiguration(config => config.AddProfile(new MappingProfile()));
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddTransient<FakeDataInitializer>();
 
+            // Добавить пользовательские сервисы в контейнер внедрения зависимостей.
+            services.AddTransient<FakeDataInitializer>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
 
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllersWithViews();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                // Включить автообновление страницы браузера при сохранении файлов .cshtml.
                 app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Error/Index");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days. You may want to change this for production scenarios,
+                // see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
+            // Включить редиректы на соответствующие страницы при формировании ответов 401, 403, 404.
             app.UseStatusCodePagesWithRedirects("/Error/{0}");
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();

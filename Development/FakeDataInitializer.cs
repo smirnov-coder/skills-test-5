@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using Microsoft.AspNetCore.Identity;
 using SkillsTest.Data;
 using SkillsTest.Domain.Entities;
@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace SkillsTest.Development
 {
+    /// <summary>
+    /// Вспомогательный класс для генерации фейковых данных.
+    /// </summary>
     public class FakeDataInitializer
     {
         private MoviesDbContext _db;
@@ -34,11 +37,15 @@ namespace SkillsTest.Development
             var faker = new Faker("en");
             for (int i = 1; i < 100; i++)
             {
+                string
+                    title = faker.Lorem.Sentence(faker.Random.Number(1, 10)),
+                    description = faker.Lorem.Paragraphs(faker.Random.Number(5, 15)),
+                    director = faker.Person.FullName;
                 _db.Movies.Add(new Movie
                 {
-                    Title = faker.Lorem.Sentence(faker.Random.Number(1, 10)),
-                    Description = faker.Lorem.Paragraphs(faker.Random.Number(5, 15)),
-                    Director = faker.Person.FullName,
+                    Title = title.Substring(0, title.Length > 100 ? 100 : title.Length),
+                    Description = description.Substring(0, description.Length > 1000 ? 1000 : description.Length),
+                    Director = director.Substring(0, director.Length > 50 ? 50 : director.Length),
                     Year = faker.Random.Number(1930, DateTime.Now.Year),
                     Poster = faker.Image.PicsumUrl(faker.Random.Number(500, 1200), faker.Random.Number(500, 1200)),
                     CreatedBy = faker.PickRandom(GetFakeUserCollection().Select(user => user.Email))

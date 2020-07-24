@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SkillsTest.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SkillsTest.Data
 {
+    /// <inheritdoc cref="IMovieRepository"/>
     public class MovieRepository : IMovieRepository
     {
         private MoviesDbContext _db;

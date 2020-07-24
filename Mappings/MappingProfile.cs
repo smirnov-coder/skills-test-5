@@ -1,13 +1,12 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SkillsTest.Domain.Entities;
 using SkillsTest.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkillsTest.Mappings
 {
+    /// <summary>
+    /// Маппинг Automapper.
+    /// </summary>
     public class MappingProfile : Profile
     {
         public MappingProfile()

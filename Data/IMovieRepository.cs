@@ -23,12 +23,12 @@ namespace SkillsTest.Data
         /// <summary>
         /// Асинхронно извлекает из репозитория фильм с заданным значением идентификатора.
         /// </summary>
-        /// <param name="movieId">Значенеи идентификатора фильма.</param>
-        /// <returns>Фильм в виде объекта <see cref="Movie"/> или null, если фильм не найден.</returns>
+        /// <param name="movieId">Значение идентификатора фильма.</param>
+        /// <returns>Данные фильма в виде объекта <see cref="Movie"/> или null, если фильм не найден.</returns>
         Task<Movie> GetMovieAsync(int movieId);
 
         /// <summary>
-        /// Асинхронно извлекает из репозитория коллекию фильмов.
+        /// Асинхронно извлекает из репозитория коллекцию фильмов.
         /// </summary>
         /// <param name="limit">Количество фильмов в выборке.</param>
         /// <param name="offset">
@@ -37,7 +37,7 @@ namespace SkillsTest.Data
         Task<IList<Movie>> GetMoviesAsync(int limit = 0, int offset = 0);
 
         /// <summary>
-        /// Создаёт новый или обновляет существующий фильма в репозитории.
+        /// Создаёт новый или обновляет существующий фильм в репозитории.
         /// </summary>
         /// <param name="movie">Данные фильма для создания/обновления.</param>
         void SaveMovie(Movie movie);

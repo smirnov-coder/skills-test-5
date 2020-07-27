@@ -21,7 +21,7 @@
 
 - Backend
   - ASP.NET Core 3.1 MVC
-  - ASP.NET Core Identity 3.1
+  - ASP.NET Core Identity 3.1 (with Cookie Authentication)
   - ORM Entity Framework Core 3.1
   - SQLite (для упрощения развёртывания без необходимости устанавливать MSSQL/PostgreSQL - скачал проект и запустил)
   - Automapper
